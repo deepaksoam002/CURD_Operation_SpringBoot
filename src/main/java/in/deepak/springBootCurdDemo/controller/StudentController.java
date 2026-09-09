@@ -1,5 +1,7 @@
 package in.deepak.springBootCurdDemo.controller;
 
+import in.deepak.springBootCurdDemo.dto.CreateStudentRequestDto;
+import in.deepak.springBootCurdDemo.dto.CreateStudentResponseDto;
 import in.deepak.springBootCurdDemo.entity.Student;
 import in.deepak.springBootCurdDemo.service.StudentService;
 import org.springframework.http.HttpStatus;
@@ -12,7 +14,7 @@ import java.util.List;
 @RequestMapping("/api/students")
 public class StudentController {
 
-    private  StudentService studentService;
+    private final StudentService studentService;
 
 
     public StudentController(StudentService studentService){
@@ -20,12 +22,12 @@ public class StudentController {
     }
 
     @PostMapping
-    public ResponseEntity<Student> createStudent(@RequestBody Student student){
-          Student createdStudent = studentService.createStudent(student);
+    public ResponseEntity<CreateStudentResponseDto> createStudent(@RequestBody CreateStudentRequestDto studentRequestDto){
+          CreateStudentResponseDto createdStudentDto = studentService.createStudent(studentRequestDto);
 
           return ResponseEntity
                   .status(HttpStatus.CREATED)
-                  .body(createdStudent);
+                  .body(createdStudentDto);
     }
 
     @GetMapping("/{id}")

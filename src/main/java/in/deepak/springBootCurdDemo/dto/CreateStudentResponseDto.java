@@ -1,14 +1,9 @@
-package in.deepak.springBootCurdDemo.entity;
+package in.deepak.springBootCurdDemo.dto;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-
-@Entity
-public class Student {
-    @Id
+@Component
+public class CreateStudentResponseDto {
 
     private Long id;
     private String name;
@@ -16,9 +11,7 @@ public class Student {
     private int rollNo;
     private int age;
     private String subject;
-    private boolean deleted;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private String message;
 
     public Long getId() {
         return id;
@@ -68,27 +61,11 @@ public class Student {
         this.subject = subject;
     }
 
-    public boolean isDeleted() {
-        return deleted;
+    public String getMessage() {
+        return message;
     }
 
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

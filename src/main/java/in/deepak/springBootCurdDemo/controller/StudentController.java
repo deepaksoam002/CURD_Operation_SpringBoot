@@ -1,7 +1,6 @@
 package in.deepak.springBootCurdDemo.controller;
 
-import in.deepak.springBootCurdDemo.dto.CreateStudentRequestDto;
-import in.deepak.springBootCurdDemo.dto.CreateStudentResponseDto;
+import in.deepak.springBootCurdDemo.dto.*;
 import in.deepak.springBootCurdDemo.entity.Student;
 import in.deepak.springBootCurdDemo.service.StudentService;
 import org.springframework.http.HttpStatus;
@@ -31,25 +30,25 @@ public class StudentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Student> getStudent(@PathVariable Long id ){
+    public ResponseEntity<GetStudentResponseDto> getStudent(@PathVariable Long id ){
 
-        Student student = studentService.getStudent(id);
+        GetStudentResponseDto student = studentService.getStudent(id);
 
          return ResponseEntity
                  .ok(student);
     }
 
     @GetMapping
-    public ResponseEntity<List<Student>> getAllStudent(){
+    public ResponseEntity<List<GetStudentResponseDto>> getAllStudent(){
 
-        List<Student> studentList = studentService.getAllStudent();
+        List<GetStudentResponseDto> studentList = studentService.getAllStudent();
         return ResponseEntity.ok(studentList);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Student> updateStudentInfo(@PathVariable Long id, @RequestBody Student student){
+    public ResponseEntity<UpdateStudentResponseDto> updateStudentInfo(@PathVariable Long id, @RequestBody UpdateStudentRequestDto student){
 
-        Student updatedStudent = studentService.updateStudent(id,student);
+        UpdateStudentResponseDto updatedStudent = studentService.updateStudent(id,student);
 
         if(updatedStudent == null){
 

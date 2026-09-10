@@ -1,8 +1,7 @@
 package in.deepak.springBootCurdDemo.service;
 
 
-import in.deepak.springBootCurdDemo.dto.CreateStudentRequestDto;
-import in.deepak.springBootCurdDemo.dto.CreateStudentResponseDto;
+import in.deepak.springBootCurdDemo.dto.*;
 import in.deepak.springBootCurdDemo.entity.Student;
 import in.deepak.springBootCurdDemo.repository.StudentRepository;
 import org.springframework.stereotype.Component;
@@ -15,12 +14,17 @@ import java.util.Optional;
 @Service
 public class StudentService {
 
+    //Instance Variable
     private final StudentRepository studentRepository;
 
+    //Constructor
     public StudentService(StudentRepository studentRepository){
         this.studentRepository = studentRepository;
     }
 
+
+
+    //Create Student in Database
     public CreateStudentResponseDto createStudent(CreateStudentRequestDto studentReqDto){
 
         Student studentReq = mapToCreateStudent(studentReqDto);
@@ -29,23 +33,34 @@ public class StudentService {
         return mapToCreatedResponseDto(student);
     };
 
-    public Student getStudent( Long id){
+
+    //Get Student By id
+    public GetStudentResponseDto getStudent( Long id){
 
         Optional<Student> studentRes = studentRepository.findByIdAndDeletedIsFalse(id);
 
         if(studentRes.isPresent()){
-            return studentRes.get();
+
+            Student student = studentRes.get();
+            return mapToGetStudentResponse(student);
         };
 
         return null;
     }
 
-    public List<Student> getAllStudent(){
 
-        return studentRepository.findByDeletedIsFalse();
+    // Get All Student List
+    public List<GetStudentResponseDto> getAllStudent(){
+
+        return studentRepository.findByDeletedIsFalse().stream()
+                 .map(this::mapToGetStudentResponse)
+                 .toList();
+
     };
 
-    public Student updateStudent( Long id, Student student){
+
+    //Update Student Info In Database
+    public UpdateStudentResponseDto updateStudent(Long id, UpdateStudentRequestDto studentUpdateReq){
 
         Optional<Student>  getStudentInfo = studentRepository.findByIdAndDeletedIsFalse(id);
 
@@ -54,28 +69,30 @@ public class StudentService {
         }
 
         Student studentToUpdate = getStudentInfo.get();
-        studentToUpdate.setName(student.getName());
-        studentToUpdate.setEmail(student.getEmail());
-        studentToUpdate.setRollNo(student.getRollNo());
-        studentToUpdate.setAge(student.getAge());
-        studentToUpdate.setSubject(student.getSubject());
+        studentToUpdate.setName(studentUpdateReq.getName());
+        studentToUpdate.setRollNo(studentUpdateReq.getRollNo());
+        studentToUpdate.setAge(studentUpdateReq.getAge());
+        studentToUpdate.setSubject(studentUpdateReq.getSubject());
+        studentToUpdate.setUpdatedAt(LocalDateTime.now());
 
-
-        return studentRepository.save(studentToUpdate);
+        Student studentUpdatedInfo = studentRepository.save(studentToUpdate);
+        return createUpdateStudentInfoResponse(studentUpdatedInfo);
     };
 
+
+    //Delete Student Record From Database
     public Boolean deleteStudent( Long id){
 
         boolean isStudentExist = studentRepository.existsById(id);
-
         if(!isStudentExist){
             return null;
         }
-
         studentRepository.deleteById(id);
         return true;
     }
 
+
+    // Mark Student Record Delete In Database
     public Boolean softDeleteStudent( Long id){
 
         Optional<Student> isStudentExist = studentRepository.findById(id);
@@ -90,6 +107,8 @@ public class StudentService {
         return true;
     }
 
+
+    //CreateStudentDtoRequest --> Student Mapping
     private Student mapToCreateStudent(CreateStudentRequestDto studentRequestDto){
         Student student = new Student();
 
@@ -105,6 +124,8 @@ public class StudentService {
         return student;
     }
 
+
+    //Student Object  -->  CreateStudentDtoResponse
     private CreateStudentResponseDto mapToCreatedResponseDto(Student student){
         CreateStudentResponseDto createStudentResponseDto = new CreateStudentResponseDto();
 
@@ -117,5 +138,42 @@ public class StudentService {
         createStudentResponseDto.setMessage("Student created Successfully");
 
         return createStudentResponseDto;
+    }
+
+
+    //Student Object  -->  GetStudentResponseDto
+    private GetStudentResponseDto mapToGetStudentResponse(Student student){
+        GetStudentResponseDto getStudentResponse = new GetStudentResponseDto();
+
+        getStudentResponse.setId(student.getId());
+        getStudentResponse.setName(student.getName());
+        getStudentResponse.setAge(student.getAge());
+        getStudentResponse.setEmail(student.getEmail());
+        getStudentResponse.setRollNo(student.getRollNo());
+        getStudentResponse.setSubject(student.getSubject());
+        getStudentResponse.setCreatedAt(student.getCreatedAt());
+        getStudentResponse.setUpdatedAt(student.getUpdatedAt());
+
+        return getStudentResponse;
+    }
+
+
+    //Student Object  -->  UpdateStudentResponseDto
+    private UpdateStudentResponseDto createUpdateStudentInfoResponse(Student student){
+
+        UpdateStudentResponseDto updateStudentResponseDto = new UpdateStudentResponseDto();
+
+        updateStudentResponseDto.setId(student.getId());
+        updateStudentResponseDto.setName(student.getName());
+        updateStudentResponseDto.setEmail(student.getEmail());
+        updateStudentResponseDto.setAge(student.getAge());
+        updateStudentResponseDto.setRollNo(student.getRollNo());
+        updateStudentResponseDto.setSubject(student.getSubject());
+        updateStudentResponseDto.setCreatedAt(student.getCreatedAt());
+        updateStudentResponseDto.setUpdatedAt(student.getUpdatedAt());
+        updateStudentResponseDto.setMessage("Student Updated Successfully");
+
+        return updateStudentResponseDto;
+
     }
 }

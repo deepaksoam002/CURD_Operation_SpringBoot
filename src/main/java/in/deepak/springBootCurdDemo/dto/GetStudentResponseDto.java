@@ -1,23 +1,14 @@
-package in.deepak.springBootCurdDemo.entity;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+package in.deepak.springBootCurdDemo.dto;
 
 import java.time.LocalDateTime;
 
-@Entity
-public class Student {
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+public class GetStudentResponseDto {
     private Long id;
     private String name;
     private String email;
     private int rollNo;
     private int age;
     private String subject;
-    private boolean deleted;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -67,14 +58,6 @@ public class Student {
 
     public void setSubject(String subject) {
         this.subject = subject;
-    }
-
-    public boolean isDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
     }
 
     public LocalDateTime getCreatedAt() {

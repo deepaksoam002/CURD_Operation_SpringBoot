@@ -92,4 +92,8 @@ public class Student {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    public Student orElseThrow(Object o) {
+        return null;
+    }
 }

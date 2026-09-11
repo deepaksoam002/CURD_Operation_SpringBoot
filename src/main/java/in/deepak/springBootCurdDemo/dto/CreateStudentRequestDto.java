@@ -1,11 +1,22 @@
 package in.deepak.springBootCurdDemo.dto;
 
+import jakarta.validation.constraints.*;
+
 public class CreateStudentRequestDto {
 
+    @NotEmpty(message = "Name is required")
+    @Size(min = 2, max = 100)
     private String name;
+
+    @Email(message = "Email is required and correct")
     private String email;
+
+    @Positive
+    @Max(100)
     private int rollNo;
+    @Min(5)
     private int age;
+    @NotEmpty
     private String subject;
 
     public String getName() {
